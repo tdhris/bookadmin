@@ -1,0 +1,11 @@
+#This file contains JPA Diagram Editor settings
+#Wed Aug 13 10:05:48 EEST 2014
+supportOrmXml=false
+accessType=field
+defaultTableNamePrefix=
+defaultPackage=com.sap.internship.bookadmin
+directEditAffectsClass=true
+diagramFolder=diagrams
+ormXmlFileName=META-INF/orm.xml
+collectionType=collection
+oneToManyOldStyle=false

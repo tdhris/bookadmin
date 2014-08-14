@@ -1,0 +1,11 @@
+{
+    "name": "components.appHeader",
+    "version": "0.1.0",
+    "description": "Application header",
+    "keywords": [
+        "header",
+        "component" 
+    ],
+    "dependencies": {
+    }
+}

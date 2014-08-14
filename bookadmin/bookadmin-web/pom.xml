@@ -1,0 +1,63 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.sap.internship.bookadmin</groupId>
+	<artifactId>bookadmin-web</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.sap.internship.bookadmin</groupId>
+			<artifactId>bookadmin-model-jpa</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sap.cloud</groupId>
+			<artifactId>neo-java-web-api</artifactId>
+			<version>2.5.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- Olingo OData dependencies -->
+		<dependency>
+			<groupId>org.apache.olingo</groupId>
+			<artifactId>olingo-odata2-api-incubating</artifactId>
+			<version>1.0.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.olingo</groupId>
+			<artifactId>olingo-odata2-core-incubating</artifactId>
+			<version>1.0.0</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.olingo</groupId>
+			<artifactId>olingo-odata2-jpa-processor-api-incubating</artifactId>
+			<version>1.0.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.olingo</groupId>
+			<artifactId>olingo-odata2-api-annotation-incubating</artifactId>
+			<version>1.0.0</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.olingo</groupId>
+			<artifactId>olingo-odata2-jpa-processor-core-incubating</artifactId>
+			<version>1.0.0</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
+			<version>2.7.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-api</artifactId>
+			<version>2.7.5</version>
+		</dependency>
+	</dependencies>
+</project>
