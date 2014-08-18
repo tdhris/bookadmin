@@ -18,55 +18,57 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.sap.internship.libraryadmin.model.Book;
+import com.sap.internship.libraryadmin.model.User;
 
 @Stateless
-@Path("/Books")
+@Path("/Users")
 @Produces(MediaType.APPLICATION_JSON)
 @WebService
-public class BookServiceImpl implements BookService {
-    @PersistenceContext(unitName = "BookService", type = PersistenceContextType.TRANSACTION)
+public class UserServiceImpl implements UserService {
+    @PersistenceContext(unitName = "UserService", type = PersistenceContextType.TRANSACTION)
     EntityManager entityManager = EntityManagerHelper.getEntityManager(DataSourceProvider.getInstance().get());
 
     @SuppressWarnings("unchecked")
     @Override
     @GET
-    public Collection<Book> getBooks() {
-        Query query = entityManager.createQuery("SELECT b FROM Book b");
+    @Produces(MediaType.APPLICATION_JSON)
+    public Collection<User> getUsers() {
+        Query query = entityManager.createQuery("SELECT u FROM User u");
         return query.getResultList();
     }
 
     @Override
     @GET
     @Path("/{id}")
-    public Book getBook(@PathParam("id") long id) {
-        return entityManager.find(Book.class, id);
+    public User getUser(@PathParam("id") long id) {
+        return entityManager.find(User.class, id);
     }
 
     @Override
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void addBook(Book book) {
+    public void addUser(User user) {
         entityManager.getTransaction().begin();
-        entityManager.persist(book);
+        entityManager.persist(user);
         entityManager.getTransaction().commit();
+
     }
 
     @Override
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    public void updateBook(@PathParam("id") long id, Book book) {
-        entityManager.merge(book);
+    public void updateUser(long id, User user) {
+        entityManager.merge(user);
     }
 
     @Override
     @DELETE
     @Path("/{id}")
-    public void deleteBook(@PathParam("id") long id) {
-        Book book = getBook(id);
-        if (book != null) {
-            entityManager.remove(book);
+    public void deleteUser(long id) {
+        User user = getUser(id);
+        if (user != null) {
+            entityManager.remove(user);
         }
     }
 

@@ -8,67 +8,70 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQuery;
-import javax.xml.bind.annotation.XmlRootElement;
+
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @Entity
 @NamedQuery(name = "AllBooks", query = "SELECT b FROM Book b")
-@XmlRootElement(name="Book")
+@JsonSerialize
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Book implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public Book() {
-	}
+    public Book() {
+    }
 
-	@Id
-	@GeneratedValue
-	private long id;
-	private String title;
-	private String author;
-	private String description;
-	private String copies;
-	
-	@ManyToMany(mappedBy="booksTaken")
-	private List<User> borrowers;
+    @Id
+    @GeneratedValue
+    private long id;
+    private String title;
+    private String author;
+    private String description;
+    private String copies;
 
-	public long getId() {
-		return id;
-	}
+    @ManyToMany(mappedBy = "booksTaken")
+    private List<User> borrowers;
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public void setTitle(String param) {
-		this.title = param;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public String getAuthor() {
-		return author;
-	}
+    public void setTitle(String param) {
+        this.title = param;
+    }
 
-	public void setAuthor(String param) {
-		this.author = param;
-	}
+    public String getAuthor() {
+        return author;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public void setAuthor(String param) {
+        this.author = param;
+    }
 
-	public void setDescription(String param) {
-		this.description = param;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public String getCopies() {
-		return copies;
-	}
+    public void setDescription(String param) {
+        this.description = param;
+    }
 
-	public void setCopies(String param) {
-		this.copies = param;
-	}
+    public String getCopies() {
+        return copies;
+    }
+
+    public void setCopies(String param) {
+        this.copies = param;
+    }
 
 }
