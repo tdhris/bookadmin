@@ -1,0 +1,107 @@
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m" controllerName="library-admin-web.main" xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="Library Admin">
+		<content>
+			<IconTabBar id="tabBar">
+				<items>
+					<IconTabFilter text="Add Book">
+						<VBox alignItems="Center">
+							<items>
+								<Input id="titleInput" type="Text" placeholder="Enter Book Title"
+									valueStateText="Title must not be empty. Maximum 30 characters."
+									value="{
+          path : 'Title',
+          type : 'sap.ui.model.type.String',
+          constraints : {
+            minLength: 1,
+            maxLength: 30
+          }
+        }" />
+								<Input id="authorInput" placeholder="Enter author"
+									value="{
+          path : 'Author',
+          type : 'sap.ui.model.type.String',
+          constraints : {
+            minLength: 1,
+            maxLength: 30
+          }
+        }" />
+								<Input id="descriptionInput" placeholder="Enter book description"
+									value="{
+          path : 'Description',
+          type : 'sap.ui.model.type.String',
+          constraints : {
+            minLength: 10,
+            maxLength: 300
+          }
+        }" />
+								<Input id="copiesInput" placeholder="Copies count"
+									value="{
+          path : 'Copies',
+          type : 'sap.ui.model.type.Integer',
+          constraints : {
+             minIntegerDigits: 1,
+             maxIntegerDigits: 5
+          }
+        }" />
+								<Button text="Add Book" press="addBook" />
+							</items>
+						</VBox>
+					</IconTabFilter>
+					<IconTabFilter text="Add User">
+						<Text text="to do.." />
+					</IconTabFilter>
+					<IconTabFilter text="List Books">
+						<Table id="idBooksTable" inset="false" visibleRowCount="5"
+							selectionMode="Single" editable="false" rows="{/Books}">
+							items="{
+							path: '/Books',
+							sorter: {
+							path: 'Title'
+							}
+							}">
+							<headerToolbar>
+								<Toolbar>
+									<Label text="Books"></Label>
+								</Toolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="12em">
+									<Text text="Title" />
+								</Column>
+								<Column minScreenWidth="Tablet" demandPopin="true">
+									<Text text="Author" />
+								</Column>
+								<Column minScreenWidth="Tablet" demandPopin="true">
+									<Text text="Description" />
+								</Column>
+								<Column minScreenWidth="Tablet" demandPopin="true"
+									hAlign="Center">
+									<Text text="Copies" />
+								</Column>
+								<Column hAlign="Right">
+									<Text text="Available Copies" />
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<ObjectIdentifier text="{Title}"
+											class="sapMTableContentMargin" />
+										<Text text="{Author}" />
+										<Text text="{Description}" />
+										<ObjectNumber number="{Copies}" />
+										<ObjectNumber number="{Available Copies}" />
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<IconTabFilter text="List Users">
+						<Text text="To do" />
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+		</content>
+	</Page>
+</core:View>
