@@ -84,7 +84,7 @@
 								<Column width="12em">
 									<Text text="Username" />
 								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
+								<Column minScreenWidth="Tablet">
 									<Text text="Faculty Number" />
 								</Column>
 							</columns>

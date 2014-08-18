@@ -8,6 +8,7 @@ import javax.ws.rs.core.Application;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 
 import com.sap.internship.libraryadmin.service.BookServiceImpl;
+import com.sap.internship.libraryadmin.service.UserServiceImpl;
 
 public class RestConfig extends Application {
     private Set<Object> singletons = new HashSet<Object>();
@@ -15,6 +16,7 @@ public class RestConfig extends Application {
     public RestConfig() {
         singletons.add(new JacksonJsonProvider());
         singletons.add(new BookServiceImpl());
+        singletons.add(new UserServiceImpl());
     }
 
     @Override

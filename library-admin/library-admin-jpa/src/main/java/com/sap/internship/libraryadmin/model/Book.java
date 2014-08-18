@@ -1,19 +1,15 @@
 package com.sap.internship.libraryadmin.model;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedQuery;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @Entity
-@NamedQuery(name = "AllBooks", query = "SELECT b FROM Book b")
 @JsonSerialize
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Book implements Serializable {
@@ -30,9 +26,6 @@ public class Book implements Serializable {
     private String author;
     private String description;
     private String copies;
-
-    @ManyToMany(mappedBy = "booksTaken")
-    private List<User> borrowers;
 
     public long getId() {
         return id;
