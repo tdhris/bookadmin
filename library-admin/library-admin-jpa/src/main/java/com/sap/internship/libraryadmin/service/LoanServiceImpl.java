@@ -27,9 +27,14 @@ public class LoanServiceImpl implements LoanService {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/users/{user_id}/take-book/bookid={book_id}")
-    public void takeBook(@PathParam("uder_id") long user_id, @PathParam("book_id") long book_id, Book book) {
+    public void takeBook(@PathParam("uder_id") long user_id, @PathParam("book_id") long book_id) {
         User user = entityManager.find(User.class, user_id);
-        if (book.hasAvailableCopies()) {
+        Book book = entityManager.find(Book.class, book_id);
+        System.out.println(book != null);
+        System.out.println(user != null);
+        System.out.println(user_id);
+        System.out.println(book_id);
+        if (book != null && user != null && book.hasAvailableCopies()) {
             user.borrowBook(book);
             book.borrowBook(user);
             entityManager.getTransaction().begin();
@@ -38,7 +43,6 @@ public class LoanServiceImpl implements LoanService {
             entityManager.getTransaction().commit();
             System.out.println("Added");
         }
-        System.out.println("finished");
     }
 
     @Override

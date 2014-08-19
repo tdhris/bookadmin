@@ -41,6 +41,11 @@ sap.ui.controller("library-admin-web.details", {
     if (aContext) {
     	var bookSelected = oEvent.getSource().getBinding("items").getModel().getData()[0];
     	var user_id = this.getView().getModel("userModel").getData()['id'];
+    	alert(typeof user_id);
+    	alert(user_id);
+    	alert(typeof bookSelected['id']);
+    	alert(bookSelected['id']);
+    	alert(this.loanServiceUrl + "/users/" + user_id + "/take-book/bookid=" + bookSelected['id']);
     	$.ajax({
 				type : "PUT",
 				url : this.loanServiceUrl + "/users/" + user_id + "/take-book/bookid=" + bookSelected['id'],

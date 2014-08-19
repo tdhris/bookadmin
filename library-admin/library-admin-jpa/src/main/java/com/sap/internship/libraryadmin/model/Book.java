@@ -95,9 +95,8 @@ public class Book implements Serializable {
     }
 
     public boolean hasAvailableCopies() {
-        int allCopies = Integer.parseInt(copies);
         int current = Integer.parseInt(availableCopies);
-        return ((allCopies - current) > 0);
+        return (current > 0);
     }
 
     public void setAvailableCopies(String availableCopies) {
