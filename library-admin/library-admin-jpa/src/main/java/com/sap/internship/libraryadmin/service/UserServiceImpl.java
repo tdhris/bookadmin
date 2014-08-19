@@ -18,6 +18,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.sap.internship.libraryadmin.model.Book;
 import com.sap.internship.libraryadmin.model.User;
 
 @Stateless
@@ -70,6 +71,24 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             entityManager.remove(user);
         }
+    }
+
+    @Override
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}/books")
+    public Collection<Book> getBooksTakenByUser(@PathParam("id") long id) {
+        User user = entityManager.find(User.class, id);
+        return user.getBooks();
+    }
+
+    @Override
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}/books-returned")
+    public Collection<Book> getBooksReturnedByUser(long id) {
+        User user = entityManager.find(User.class, id);
+        return user.getBooksReturned();
     }
 
 }

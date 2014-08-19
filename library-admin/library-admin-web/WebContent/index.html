@@ -24,9 +24,17 @@
 		viewName : "library-admin-web.main",
 		type : sap.ui.core.mvc.ViewType.XML
 	});
+	
+	var details = sap.ui.view({
+		id : "details1",
+		viewName : "library-admin-web.details",
+		type : sap.ui.core.mvc.ViewType.XML
+	});
+	details.addEventDelegate({ onBeforeShow: details.getController().updateModel.bind(details.getController())});
+
 	var app = new sap.m.App("LibAdminApp");
 	//app.addPage(login).addPage(main);
-	app.addPage(main);
+	app.addPage(main).addPage(details);
 	var shell = new sap.m.Shell("Shell", {
 		showLogout : false
 	});

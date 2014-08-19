@@ -44,9 +44,20 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}")
+    public int getCopiesTakenCount(long id) {
+        Book book = entityManager.find(Book.class, id);
+        return book.takenCount();
+    }
+
+    @Override
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void addBook(Book book) {
+        String copies = book.getCopies();
+        book.setAvailableCopies(copies);
         entityManager.getTransaction().begin();
         entityManager.persist(book);
         entityManager.getTransaction().commit();
