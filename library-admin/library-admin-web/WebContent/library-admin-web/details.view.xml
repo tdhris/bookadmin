@@ -13,10 +13,24 @@
 				headerText="Books Taken">
 				<items>
 					<ObjectListItem title="{activeBooksOfUserModel>title}"
-						type="Active" press="showBookDetails">
+						type="Active" press="confirmReturn">
 						<attributes>
 							<ObjectAttribute text="Written by {activeBooksOfUserModel>author}" />
-							<ObjectAttribute text="Available Copies Left : {activeBooksOfUserModel>availableCopiesInt}" />
+							<ObjectAttribute
+								text="Available Copies Left : {activeBooksOfUserModel>availableCopiesInt}" />
+						</attributes>
+					</ObjectListItem>
+				</items>
+			</List>
+			<List
+				items="{ path: 'pastBooksOfUserModel>/', sorter: { path: 'pastBooksOfUserModel>/title' } }"
+				headerText="Book History (Books Returned)">
+				<items>
+					<ObjectListItem title="{pastBooksOfUserModel>title}">
+						<attributes>
+							<ObjectAttribute text="Written by {pastBooksOfUserModel>author}" />
+							<ObjectAttribute
+								text="Available Copies : {pastBooksOfUserModel>availableCopiesInt}" />
 						</attributes>
 					</ObjectListItem>
 				</items>

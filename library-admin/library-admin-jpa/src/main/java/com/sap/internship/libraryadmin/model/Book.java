@@ -134,4 +134,15 @@ public class Book implements Serializable {
         this.syncAvailableCopies();
     }
 
+    public void removeLoan(BookLoan currentLoan) {
+        this.getBookLoans().remove(currentLoan);
+        this.returnCopy();
+    }
+
+    private void returnCopy() {
+        int current = getAvailableCopiesInt();
+        current++;
+        this.setAvailableCopies(Integer.toString(current));
+    }
+
 }

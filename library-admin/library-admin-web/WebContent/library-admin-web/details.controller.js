@@ -1,5 +1,5 @@
 sap.ui.controller("library-admin-web.details", {
-	
+
 	onInit : function() {
 		this.getView().setModel(new sap.ui.model.json.JSONModel(), "userModel");
 	},
@@ -19,17 +19,13 @@ sap.ui.controller("library-admin-web.details", {
 
 	updateModel : function(event) {
 		this.getView().getModel("userModel").setData(event.data);
-		
+
 		var user = this.getView().getModel("userModel").getData();
 		var currentBooks = this.loanServiceUrl + "/users/" + user.id + "/current-books";
 		var returnedBooks = this.loanServiceUrl + "/users/" + user.id + "/returned-books";
-		this.getView().setModel(
-				new sap.ui.model.json.JSONModel(currentBooks),
-				"activeBooksOfUserModel");
-		this.getView().setModel(
-				new sap.ui.model.json.JSONModel(returnedBooks),
-				"pastBooksOfUserModel");
-		
+		this.getView().setModel(new sap.ui.model.json.JSONModel(currentBooks), "activeBooksOfUserModel");
+		this.getView().setModel(new sap.ui.model.json.JSONModel(returnedBooks), "pastBooksOfUserModel");
+
 	},
 
 	showBookList : function(oEvent) {
@@ -47,32 +43,66 @@ sap.ui.controller("library-admin-web.details", {
 		var oBinding = oEvent.getSource().getBinding("items");
 		oBinding.filter([oFilter]);
 	},
-	
+
 	refreshModel : function(sModelName, sModelUrl) {
 		this.getView().getModel(sModelName).loadData(sModelUrl);
+	},
+
+	returnBook : function(book) {
+		var bookId = book.getProperty("id");
+		var bookTitle = book.getProperty("title");
+		var user = this.getView().getModel("userModel").getData();
+
+		$.ajax({
+			type : "PUT",
+			url : this.loanServiceUrl + "/users/" + user.id + "/return-book/" + bookId,
+			contentType : 'application/json; charset=UTF-8',
+			error : this.loanBookError.bind(this),
+			success : function(data, textStatus, jqXHR) {
+				sap.m.MessageBox.alert(bookTitle + " has been returned");
+				this.refreshModel("pastBooksOfUserModel", this.loanServiceUrl + "/users/" + user.id + "/returned-books");
+				this.refreshModel("activeBooksOfUserModel", this.loanServiceUrl + "/users/" + user.id + "/current-books");
+			}.bind(this)
+		});
 	},
 
 	handleSelect : function(oEvent) {
 		var selectedItem = oEvent.getParameter("selectedItem");
 		if (selectedItem) {
-			var bindingContext = selectedItem.getBindingContext("booksModel");
-			var bookId = bindingContext.getProperty("id");
-			var bookTitle = bindingContext.getProperty("title");
+			var book = selectedItem.getBindingContext("booksModel");
+			var bookId = book.getProperty("id");
+			var bookTitle = book.getProperty("title");
 			var user = this.getView().getModel("userModel").getData();
 
 			$.ajax({
 				type : "PUT",
 				url : this.loanServiceUrl + "/users/" + user.id + "/take-book/" + bookId,
 				contentType : 'application/json; charset=UTF-8',
-				error : function() {
-					sap.m.MessageBox.alert("Failure: could not take book.");
-				},
-				success : function() {
+				error : this.loanBookError.bind(this),
+				success : function(data, textStatus, jqXHR) {
 					sap.m.MessageBox.alert(bookTitle + " has been added to " + user.username + "'s books");
 					this.refreshModel("activeBooksOfUserModel", this.loanServiceUrl + "/users/" + user.id + "/current-books");
 				}.bind(this)
 			});
 		}
-	}
+	},
 
+	loanBookError : function(jqXHR, textStatus, errorThrown) {
+		sap.m.MessageBox.alert("Failure: could not take book. " + (jqXHR.responseText || ""));
+	},
+
+	confirmReturn : function(oEvent) {
+		var book = oEvent.getSource().getBindingContext("activeBooksOfUserModel");
+		var message = "Are you sure you want to return '" + book.getProperty("title") + "' by " + book.getProperty("author");
+		sap.m.MessageBox.confirm(message, {
+			title : "Return",
+			actions : [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CANCEL],
+			onClose : function(choice) {
+				if (choice == "OK") {
+					this.returnBook(book);
+				}
+			}.bind(this),
+			styleClass : ""
+		});
+	},
 });

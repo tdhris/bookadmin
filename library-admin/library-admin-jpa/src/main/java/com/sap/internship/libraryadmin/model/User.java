@@ -84,4 +84,14 @@ public class User implements Serializable {
     public void addLoan(BookLoan loan) {
         this.getBookLoans().add(loan);
     }
+
+    public boolean canTakeBook(Book book) {
+        for (BookLoan bookLoan : this.getActiveBookLoans()) {
+            if (book.equals(bookLoan.getBook())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

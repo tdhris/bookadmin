@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import javax.jws.WebService;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Response;
 
 import com.sap.internship.libraryadmin.model.Book;
 import com.sap.internship.libraryadmin.model.User;
@@ -11,7 +12,7 @@ import com.sap.internship.libraryadmin.model.User;
 @WebService
 public interface LoanService {
 
-    public void takeBook(@PathParam("user_id") long user_id, @PathParam("book_id") long book_id);
+    public Response takeBook(@PathParam("user_id") long user_id, @PathParam("book_id") long book_id);
 
     public Collection<User> getCurrentBorrowers(@PathParam("book_id") long book_id);
 
@@ -21,5 +22,5 @@ public interface LoanService {
 
     public Collection<Book> getReturnedBooksOfUser(@PathParam("user_id") long user_id);
 
-    void returnBook(@PathParam("user_id") long user_id, @PathParam("book_id") long book_id);
+    Response returnBook(@PathParam("user_id") long user_id, @PathParam("book_id") long book_id);
 }
