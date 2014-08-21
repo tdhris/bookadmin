@@ -129,12 +129,6 @@
 			<version>${apache.cxf.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-jaxrs</artifactId>
-			<version>1.4.3</version>
-		</dependency>
-
 	</dependencies>
 
 	<build>
