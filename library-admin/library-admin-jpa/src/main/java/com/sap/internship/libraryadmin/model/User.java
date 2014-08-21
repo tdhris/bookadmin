@@ -1,17 +1,19 @@
 package com.sap.internship.libraryadmin.model;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @Entity
@@ -22,19 +24,20 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue
+    @Column(name = "ID")
     private long id;
     @Column(unique = true)
     private String username;
     @Column(unique = true)
     private String facultyNumber;
 
-    @ManyToMany
-    @JoinTable(name = "US_BOOK_ACT", joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "book_id", referencedColumnName = "id") })
-    private List<Book> books;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // @JsonBackReference
+    @JsonIgnore
+    private Collection<BookLoan> bookLoans;
 
-    @ManyToMany
-    @JoinTable(name = "US_BOOK_RET", joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "book_id", referencedColumnName = "id") })
-    private List<Book> booksReturned;
+    public User() {
+    }
 
     public long getId() {
         return id;
@@ -60,20 +63,25 @@ public class User implements Serializable {
         this.facultyNumber = facultyNumber;
     }
 
-    public List<Book> getBooks() {
-        return books;
+    public Collection<BookLoan> getBookLoans() {
+        return bookLoans;
     }
 
-    public List<Book> getBooksReturned() {
-        return booksReturned;
+    public void setBookLoans(Collection<BookLoan> bookLoans) {
+        this.bookLoans = bookLoans;
     }
 
-    public void borrowBook(Book book) {
-        this.books.add(book);
+    public Collection<BookLoan> getActiveBookLoans() {
+        Collection<BookLoan> activeLoans = new ArrayList<>();
+        for (BookLoan loan : this.getBookLoans()) {
+            if (loan.isActive()) {
+                activeLoans.add(loan);
+            }
+        }
+        return activeLoans;
     }
 
-    public void returnBook(Book book) {
-        this.books.remove(book);
-        this.booksReturned.add(book);
+    public void addLoan(BookLoan loan) {
+        this.getBookLoans().add(loan);
     }
 }

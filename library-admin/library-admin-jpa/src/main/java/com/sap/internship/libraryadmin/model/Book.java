@@ -1,13 +1,17 @@
 package com.sap.internship.libraryadmin.model;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -19,10 +23,13 @@ public class Book implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public Book() {
+        String copies = this.getCopies();
+        this.setAvailableCopies(copies);
     }
 
     @Id
     @GeneratedValue
+    @Column(name = "ID")
     private long id;
     private String title;
     private String author;
@@ -30,19 +37,10 @@ public class Book implements Serializable {
     private String copies;
     private String availableCopies;
 
-    @ManyToMany(mappedBy = "books")
-    private List<User> borrowers;
-
-    @ManyToMany(mappedBy = "booksReturned")
-    private List<User> borrowersHistory;
-
-    public List<User> getBorrowers() {
-        return borrowers;
-    }
-
-    public int takenCount() {
-        return this.borrowers.size();
-    }
+    // @JsonBackReference
+    @JsonIgnore
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Collection<BookLoan> bookLoans;
 
     public long getId() {
         return id;
@@ -80,49 +78,62 @@ public class Book implements Serializable {
         return copies;
     }
 
+    public int getCopiesInt() {
+        return Integer.parseInt(copies);
+    }
+
     public void setCopies(String param) {
         this.copies = param;
     }
 
     public String getAvailableCopies() {
-        return availableCopies;
+        return this.availableCopies;
+    }
+
+    @JsonIgnore
+    public int getAvailableCopiesInt() {
+        return Integer.parseInt(this.availableCopies);
     }
 
     public void takeCopy() {
-        int current = Integer.parseInt(availableCopies);
+        int current = getAvailableCopiesInt();
         current--;
-        this.availableCopies = Integer.toString(current);
+        this.setAvailableCopies(Integer.toString(current));
     }
 
     public boolean hasAvailableCopies() {
-        int current = Integer.parseInt(availableCopies);
-        return (current > 0);
+        return this.getAvailableCopiesInt() > 0;
     }
 
     public void setAvailableCopies(String availableCopies) {
         this.availableCopies = availableCopies;
     }
 
-    public void setBorrowers(List<User> borrowers) {
-        this.borrowers = borrowers;
+    @JsonIgnore
+    public void setAvailableCopies(int availableCopies) {
+        this.setAvailableCopies(Integer.toString(availableCopies));
     }
 
-    public void setBorrowersHistory(List<User> borrowersHistory) {
-        this.borrowersHistory = borrowersHistory;
+    public void syncAvailableCopies() {
+        int exactCopiesAvailable = this.getCopiesInt() - this.takenCount();
+        this.setAvailableCopies(exactCopiesAvailable);
     }
 
-    public void borrowBook(User borrower) {
-        this.takeCopy();
-        this.borrowers.add(borrower);
+    public Collection<BookLoan> getBookLoans() {
+        return bookLoans;
     }
 
-    public void removeBorrower(User borrower) {
-        this.borrowers.remove(borrower);
-        this.borrowersHistory.add(borrower);
+    public void setBookLoans(Collection<BookLoan> bookLoans) {
+        this.bookLoans = bookLoans;
     }
 
-    public List<User> getBorrowersHistory() {
-        return borrowersHistory;
+    public int takenCount() {
+        return this.getBookLoans().size();
+    }
+
+    public void addLoan(BookLoan loan) {
+        this.getBookLoans().add(loan);
+        this.syncAvailableCopies();
     }
 
 }

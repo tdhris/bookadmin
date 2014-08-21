@@ -10,10 +10,10 @@
 				</attributes>
 			</ObjectHeader>
 			<List
-				items="{ path: 'userModel>/books', sorter: { path: 'userModel>/books/title' } }"
+				items="{ path: 'activeBooksOfUserModel>/', sorter: { path: 'activeBooksOfUserModel>/title' } }"
 				headerText="Books Taken">
 				<items>
-					<ObjectListItem title="{userModel>/books/title}"
+					<ObjectListItem title="{activeBooksOfUserModel>/title}"
 						type="Active" press="showBookDetails">
 					</ObjectListItem>
 				</items>

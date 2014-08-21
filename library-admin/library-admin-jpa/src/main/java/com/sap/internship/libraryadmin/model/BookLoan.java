@@ -2,14 +2,18 @@ package com.sap.internship.libraryadmin.model;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 @Entity
+@JsonSerialize
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BookLoan implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -17,20 +21,18 @@ public class BookLoan implements Serializable {
     @GeneratedValue
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+    // @JsonManagedReference
     private Book book;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+    // @JsonManagedReference
     private User user;
 
-    public long getId() {
-        return id;
-    }
+    private boolean isActive;
 
-    public void setId(long id) {
-        this.id = id;
+    public BookLoan() {
+        this.setActive(true);
     }
 
     public Book getBook() {
@@ -47,5 +49,25 @@ public class BookLoan implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void deactivateLoan() {
+        this.setActive(false);
     }
 }

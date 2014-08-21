@@ -1,13 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<build>
-		<resources>
-			<resource>
-				<directory>${basedir}/src/META-INF</directory>
-			</resource>
-		</resources>
-	</build>
 	<parent>
 		<groupId>com.sap.internship.libraryadmin</groupId>
 		<artifactId>library-admin</artifactId>
@@ -24,6 +17,12 @@
 			<artifactId>eclipselink</artifactId>
 			<version>2.5.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>javax.persistence</artifactId>
+			<version>2.0.5</version>
+		</dependency>
+
 		<!-- Jetty is needed if you're are not using the CXFServlet -->
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
@@ -35,11 +34,18 @@
 			<artifactId>ejb-api</artifactId>
 			<version>3.0</version>
 		</dependency>
-		
-				<dependency>
+
+		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-jaxrs</artifactId>
-			<version>1.4.3</version>
+			<version>1.9.13</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
 		</dependency>
 
 	</dependencies>

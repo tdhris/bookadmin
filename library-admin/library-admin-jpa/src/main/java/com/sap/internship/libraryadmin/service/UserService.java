@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import javax.jws.WebService;
 
-import com.sap.internship.libraryadmin.model.Book;
 import com.sap.internship.libraryadmin.model.User;
 
 @WebService
@@ -18,8 +17,4 @@ public interface UserService {
     void updateUser(long id, User user);
 
     void deleteUser(long id);
-
-    Collection<Book> getBooksTakenByUser(long id);
-
-    Collection<Book> getBooksReturnedByUser(long id);
 }

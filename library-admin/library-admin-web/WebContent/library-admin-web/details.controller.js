@@ -1,4 +1,5 @@
 sap.ui.controller("library-admin-web.details", {
+	
 	onInit : function() {
 		this.getView().setModel(new sap.ui.model.json.JSONModel(), "userModel");
 	},
@@ -8,9 +9,9 @@ sap.ui.controller("library-admin-web.details", {
 			this._oDialog.destroy();
 		}
 	},
-	
+
 	booksListServiceUrl : "services/Books",
-	loanServiceUrl: "services/Loans",
+	loanServiceUrl : "services/Loans",
 
 	goBack : function() {
 		app.to("main1");
@@ -18,12 +19,25 @@ sap.ui.controller("library-admin-web.details", {
 
 	updateModel : function(event) {
 		this.getView().getModel("userModel").setData(event.data);
+		
+		var user = this.getView().getModel("userModel").getData();
+		alert(this.loanServiceUrl + "/users/" + user.id + "/current-books");
+		///services/Loans/users/2/current-books
+		var currentBooks = this.loanServiceUrl + "/users/" + user.id + "/current-books";
+		var returnedBooks = this.loanServiceUrl + "/users/" + user.id + "/returned-books";
+		this.getView().setModel(
+				new sap.ui.model.json.JSONModel(currentBooks),
+				"activeBooksOfUserModel");
+		this.getView().setModel(
+				new sap.ui.model.json.JSONModel(returnedBooks),
+				"pastBooksOfUserModel");
+		
 	},
 
 	showBookList : function(oEvent) {
-		if (! this._oDialog) {
-      this._oDialog = sap.ui.xmlfragment("library-admin-web.bookdialog", this.getView().getController());
-    }
+		if (!this._oDialog) {
+			this._oDialog = sap.ui.xmlfragment("library-admin-web.bookdialog", this.getView().getController());
+		}
 		this._oDialog.setModel(new sap.ui.model.json.JSONModel(this.booksListServiceUrl), "booksModel");
 		jQuery.sap.syncStyleClass("sapUiSizeCompact", this.getView(), this._oDialog);
 		this._oDialog.open();
@@ -35,33 +49,32 @@ sap.ui.controller("library-admin-web.details", {
 		var oBinding = oEvent.getSource().getBinding("items");
 		oBinding.filter([oFilter]);
 	},
-	
-	handleClose: function(oEvent) {
-    var aContext = oEvent.getParameter("selectedContexts");
-    if (aContext) {
-    	var bookSelected = oEvent.getSource().getBinding("items").getModel().getData()[0];
-    	var user_id = this.getView().getModel("userModel").getData()['id'];
-    	alert(typeof user_id);
-    	alert(user_id);
-    	alert(typeof bookSelected['id']);
-    	alert(bookSelected['id']);
-    	alert(this.loanServiceUrl + "/users/" + user_id + "/take-book/bookid=" + bookSelected['id']);
-    	$.ajax({
+
+	handleSelect : function(oEvent) {
+		var selectedItem = oEvent.getParameter("selectedItem");
+		if (selectedItem) {
+			var bindingContext = selectedItem.getBindingContext("booksModel");
+			var bookId = bindingContext.getProperty("id");
+			var bookTitle = bindingContext.getProperty("title");
+			var user = this.getView().getModel("userModel").getData();
+			alert(this.loanServiceUrl + "/users/" + user.id + "/take-book/" + bookId);
+
+			$.ajax({
 				type : "PUT",
-				url : this.loanServiceUrl + "/users/" + user_id + "/take-book/bookid=" + bookSelected['id'],
-				data : JSON.stringify(bookSelected),
+				url : this.loanServiceUrl + "/users/" + user.id + "/take-book/" + bookId,
 				contentType : 'application/json; charset=UTF-8',
 				error : function() {
 					sap.m.MessageBox.alert("Failure: could not take book.");
 				},
 				success : function() {
-					sap.m.MessageBox.alert(bookSelected['title'] + "is added to your books");
+					sap.m.MessageBox.alert(bookTitle + " has been added to " + user.username + "'s books");
 				}
-			});							
-    }
+			});
+		}
 	},
-	
+
 	refreshModel : function(sModelName, sModelUrl) {
 		this.getModel(sModelName).loadData(sModelUrl);
 	}
+	
 });

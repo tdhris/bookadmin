@@ -1,8 +1,8 @@
 <core:FragmentDefinition xmlns="sap.m"
 	xmlns:core="sap.ui.core">
 	<SelectDialog noDataText="No Books" title="Select a Book"
-		search="handleSearch" confirm="handleClose"
-		close="handleClose" items="{ path: 'booksModel>/', sorter: { path: 'booksModel>title' } }">
+		search="handleSearch" confirm="handleSelect"
+		items="{ path: 'booksModel>/', sorter: { path: 'booksModel>title' } }">
 		<StandardListItem
 			title="{booksModel>title} by {booksModel>author}"
 			description="Remaining Copies: {booksModel>availableCopies}" type="Active" />
