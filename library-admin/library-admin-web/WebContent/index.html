@@ -24,6 +24,7 @@
 		viewName : "library-admin-web.main",
 		type : sap.ui.core.mvc.ViewType.XML
 	});
+	main.addEventDelegate({ onBeforeShow: main.getController().updateModel.bind(main.getController())});
 	
 	var details = sap.ui.view({
 		id : "details1",

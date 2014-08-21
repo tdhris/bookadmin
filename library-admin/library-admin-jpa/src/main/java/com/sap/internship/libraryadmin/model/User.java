@@ -32,8 +32,6 @@ public class User implements Serializable {
     private String facultyNumber;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    // @JsonBackReference
-    @JsonIgnore
     private Collection<BookLoan> bookLoans;
 
     public User() {
@@ -63,6 +61,7 @@ public class User implements Serializable {
         this.facultyNumber = facultyNumber;
     }
 
+    @JsonIgnore
     public Collection<BookLoan> getBookLoans() {
         return bookLoans;
     }
@@ -71,6 +70,7 @@ public class User implements Serializable {
         this.bookLoans = bookLoans;
     }
 
+    @JsonIgnore
     public Collection<BookLoan> getActiveBookLoans() {
         Collection<BookLoan> activeLoans = new ArrayList<>();
         for (BookLoan loan : this.getBookLoans()) {

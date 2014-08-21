@@ -21,8 +21,6 @@ sap.ui.controller("library-admin-web.details", {
 		this.getView().getModel("userModel").setData(event.data);
 		
 		var user = this.getView().getModel("userModel").getData();
-		alert(this.loanServiceUrl + "/users/" + user.id + "/current-books");
-		///services/Loans/users/2/current-books
 		var currentBooks = this.loanServiceUrl + "/users/" + user.id + "/current-books";
 		var returnedBooks = this.loanServiceUrl + "/users/" + user.id + "/returned-books";
 		this.getView().setModel(
@@ -49,6 +47,10 @@ sap.ui.controller("library-admin-web.details", {
 		var oBinding = oEvent.getSource().getBinding("items");
 		oBinding.filter([oFilter]);
 	},
+	
+	refreshModel : function(sModelName, sModelUrl) {
+		this.getView().getModel(sModelName).loadData(sModelUrl);
+	},
 
 	handleSelect : function(oEvent) {
 		var selectedItem = oEvent.getParameter("selectedItem");
@@ -57,7 +59,6 @@ sap.ui.controller("library-admin-web.details", {
 			var bookId = bindingContext.getProperty("id");
 			var bookTitle = bindingContext.getProperty("title");
 			var user = this.getView().getModel("userModel").getData();
-			alert(this.loanServiceUrl + "/users/" + user.id + "/take-book/" + bookId);
 
 			$.ajax({
 				type : "PUT",
@@ -68,13 +69,10 @@ sap.ui.controller("library-admin-web.details", {
 				},
 				success : function() {
 					sap.m.MessageBox.alert(bookTitle + " has been added to " + user.username + "'s books");
-				}
+					this.refreshModel("activeBooksOfUserModel", this.loanServiceUrl + "/users/" + user.id + "/current-books");
+				}.bind(this)
 			});
 		}
-	},
-
-	refreshModel : function(sModelName, sModelUrl) {
-		this.getModel(sModelName).loadData(sModelUrl);
 	}
-	
+
 });

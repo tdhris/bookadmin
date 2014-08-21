@@ -22,11 +22,9 @@ public class BookLoan implements Serializable {
     private long id;
 
     @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
-    // @JsonManagedReference
     private Book book;
 
     @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
-    // @JsonManagedReference
     private User user;
 
     private boolean isActive;

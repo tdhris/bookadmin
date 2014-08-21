@@ -3,12 +3,17 @@ sap.ui
 				"library-admin-web.main",
 				{
 					onInit : function() {
-						this.getView().setModel(new sap.ui.model.json.JSONModel(this.booksListServiceUrl), "bookModel");
-						this.getView().setModel(new sap.ui.model.json.JSONModel(this.usersListServiceUrl), "userModel");
+						this.getView().setModel(new sap.ui.model.json.JSONModel(), "bookModel");
+						this.getView().setModel(new sap.ui.model.json.JSONModel(), "userModel");
 						this.getView().setModel(new sap.ui.model.json.JSONModel({
 							book : {'title': "A Game of Thrones", 'author': "George Martin", 'description': 'sdsjkjasdksajdkasjdkjskdj sak', 'copies': "3"},
 							user : {'username': "Lala", "facultyNumber": "42343"}
 						}), "formModel");
+					},
+					
+					updateModel : function(event) {
+						this.getView().setModel(new sap.ui.model.json.JSONModel(this.booksListServiceUrl), "bookModel");
+						this.getView().setModel(new sap.ui.model.json.JSONModel(this.usersListServiceUrl), "userModel");
 					},
 
 					getModel : function(sModelName) {

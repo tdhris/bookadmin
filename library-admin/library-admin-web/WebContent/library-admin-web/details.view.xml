@@ -1,20 +1,23 @@
 <core:View height="100%" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
 	xmlns="sap.m" controllerName="library-admin-web.details" xmlns:html="http://www.w3.org/1999/xhtml">
-	<Page id="detailsPageId" title="{userModel>/username Details}" showNavButton="true"
-		navButtonTap="goBack">
+	<Page id="detailsPageId" title="{userModel>/username Details}"
+		showNavButton="true" navButtonTap="goBack">
 		<content>
 			<ObjectHeader title="{userModel>/username}">
 				<attributes>
-					<ObjectAttribute
-						text="{userModel>/facultyNumber}" />
+					<ObjectAttribute text="FACULTY NUMBER : {userModel>/facultyNumber}" />
 				</attributes>
 			</ObjectHeader>
 			<List
 				items="{ path: 'activeBooksOfUserModel>/', sorter: { path: 'activeBooksOfUserModel>/title' } }"
 				headerText="Books Taken">
 				<items>
-					<ObjectListItem title="{activeBooksOfUserModel>/title}"
+					<ObjectListItem title="{activeBooksOfUserModel>title}"
 						type="Active" press="showBookDetails">
+						<attributes>
+							<ObjectAttribute text="Written by {activeBooksOfUserModel>author}" />
+							<ObjectAttribute text="Available Copies Left : {activeBooksOfUserModel>availableCopiesInt}" />
+						</attributes>
 					</ObjectListItem>
 				</items>
 			</List>

@@ -37,7 +37,6 @@ public class Book implements Serializable {
     private String copies;
     private String availableCopies;
 
-    // @JsonBackReference
     @JsonIgnore
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<BookLoan> bookLoans;
@@ -90,7 +89,6 @@ public class Book implements Serializable {
         return this.availableCopies;
     }
 
-    @JsonIgnore
     public int getAvailableCopiesInt() {
         return Integer.parseInt(this.availableCopies);
     }

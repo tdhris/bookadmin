@@ -124,9 +124,6 @@ public class LoanServiceImpl implements LoanService {
 
         User user = entityManager.find(User.class, user_id);
 
-        System.out.println(user.getBookLoans().size());
-        System.out.println(user.getActiveBookLoans().size());
-
         Collection<BookLoan> loans = user.getBookLoans();
         for (BookLoan loan : loans) {
             if (!loan.isActive()) {

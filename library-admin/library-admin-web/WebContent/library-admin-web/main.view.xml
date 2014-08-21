@@ -67,17 +67,19 @@
 										<Text text="{bookModel>author}" />
 										<Text text="{bookModel>description}" />
 										<ObjectNumber number="{bookModel>copies}" />
-										<ObjectNumber number="{bookModel>availableCopies}" />
+										<ObjectNumber number="{bookModel>availableCopiesInt}" />
 									</cells>
 								</ColumnListItem>
 							</items>
 						</Table>
 					</IconTabFilter>
 					<IconTabFilter text="List Users">
-						<List items="{ path: 'userModel>/', sorter: { path: 'userModel>facultyNumber' } }" headerText="Library Users">
+						<List
+							items="{ path: 'userModel>/', sorter: { path: 'userModel>facultyNumber' } }"
+							headerText="Library Users">
 							<items>
-								<ObjectListItem title="{userModel>username}" type="Active"
-									press="showUserDetails" number="{userModel>facultyNumber}">
+								<ObjectListItem title="{userModel>username}"
+									type="Active" press="showUserDetails" number="{userModel>facultyNumber}">
 								</ObjectListItem>
 							</items>
 						</List>
