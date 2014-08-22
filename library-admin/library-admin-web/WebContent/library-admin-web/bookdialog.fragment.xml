@@ -5,6 +5,6 @@
 		items="{ path: 'booksModel>/', sorter: { path: 'booksModel>title' } }">
 		<StandardListItem
 			title="{booksModel>title} by {booksModel>author}"
-			description="Remaining Copies: {booksModel>availableCopies}" type="Active" />
+			description="Remaining Copies: {booksModel>availableCopiesInt}" type="Active" />
 	</SelectDialog>
 </core:FragmentDefinition>

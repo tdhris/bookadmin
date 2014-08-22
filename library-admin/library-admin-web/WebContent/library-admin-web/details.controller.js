@@ -19,12 +19,11 @@ sap.ui.controller("library-admin-web.details", {
 
 	updateModel : function(event) {
 		this.getView().getModel("userModel").setData(event.data);
-
 		var user = this.getView().getModel("userModel").getData();
-		var currentBooks = this.loanServiceUrl + "/users/" + user.id + "/current-books";
-		var returnedBooks = this.loanServiceUrl + "/users/" + user.id + "/returned-books";
-		this.getView().setModel(new sap.ui.model.json.JSONModel(currentBooks), "activeBooksOfUserModel");
-		this.getView().setModel(new sap.ui.model.json.JSONModel(returnedBooks), "pastBooksOfUserModel");
+		var currentBookLoans = this.loanServiceUrl + "/users/" + user.id + "/current-loans";
+		var returnedBookLoans = this.loanServiceUrl + "/users/" + user.id + "/returned-loans";
+		this.getView().setModel(new sap.ui.model.json.JSONModel(currentBookLoans), "activeBookLoansOfUserModel");
+		this.getView().setModel(new sap.ui.model.json.JSONModel(returnedBookLoans), "pastBookLoansOfUserModel");
 
 	},
 
@@ -49,8 +48,8 @@ sap.ui.controller("library-admin-web.details", {
 	},
 
 	returnBook : function(book) {
-		var bookId = book.getProperty("id");
-		var bookTitle = book.getProperty("title");
+		var bookId = book.id;
+		var bookTitle = book.title;
 		var user = this.getView().getModel("userModel").getData();
 
 		$.ajax({
@@ -60,8 +59,8 @@ sap.ui.controller("library-admin-web.details", {
 			error : this.loanBookError.bind(this),
 			success : function(data, textStatus, jqXHR) {
 				sap.m.MessageBox.alert(bookTitle + " has been returned");
-				this.refreshModel("pastBooksOfUserModel", this.loanServiceUrl + "/users/" + user.id + "/returned-books");
-				this.refreshModel("activeBooksOfUserModel", this.loanServiceUrl + "/users/" + user.id + "/current-books");
+				this.refreshModel("pastBookLoansOfUserModel", this.loanServiceUrl + "/users/" + user.id + "/returned-loans");
+				this.refreshModel("activeBookLoansOfUserModel", this.loanServiceUrl + "/users/" + user.id + "/current-loans");
 			}.bind(this)
 		});
 	},
@@ -81,19 +80,20 @@ sap.ui.controller("library-admin-web.details", {
 				error : this.loanBookError.bind(this),
 				success : function(data, textStatus, jqXHR) {
 					sap.m.MessageBox.alert(bookTitle + " has been added to " + user.username + "'s books");
-					this.refreshModel("activeBooksOfUserModel", this.loanServiceUrl + "/users/" + user.id + "/current-books");
+					this.refreshModel("pastBookLoansOfUserModel", this.loanServiceUrl + "/users/" + user.id + "/returned-loans");
+					this.refreshModel("activeBookLoansOfUserModel", this.loanServiceUrl + "/users/" + user.id + "/current-loans");
 				}.bind(this)
 			});
 		}
 	},
 
 	loanBookError : function(jqXHR, textStatus, errorThrown) {
-		sap.m.MessageBox.alert("Failure: could not take book. " + (jqXHR.responseText || ""));
+		sap.m.MessageBox.alert("Failure: " + (jqXHR.responseText || ""));
 	},
 
 	confirmReturn : function(oEvent) {
-		var book = oEvent.getSource().getBindingContext("activeBooksOfUserModel");
-		var message = "Are you sure you want to return '" + book.getProperty("title") + "' by " + book.getProperty("author");
+		var book = oEvent.getSource().getBindingContext("activeBookLoansOfUserModel").getProperty("book");
+		var message = "Are you sure you want to return '" + book.title + "' by " + book.author;
 		sap.m.MessageBox.confirm(message, {
 			title : "Return",
 			actions : [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CANCEL],

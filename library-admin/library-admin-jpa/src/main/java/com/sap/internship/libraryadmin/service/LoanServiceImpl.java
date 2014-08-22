@@ -28,6 +28,7 @@ public class LoanServiceImpl implements LoanService {
     @PersistenceContext(unitName = "UserService", type = PersistenceContextType.TRANSACTION)
     EntityManager entityManager = EntityManagerHelper.getEntityManager(DataSourceProvider.getInstance().get());
 
+    @SuppressWarnings("unchecked")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<BookLoan> getLoans() {
@@ -51,8 +52,8 @@ public class LoanServiceImpl implements LoanService {
             BookLoan loan = new BookLoan();
             loan.setBook(book);
             loan.setUser(user);
-            book.addLoan(loan);
             user.addLoan(loan);
+            book.addLoan(loan);
             entityManager.merge(loan);
             entityManager.merge(book);
             entityManager.merge(user);
@@ -79,8 +80,9 @@ public class LoanServiceImpl implements LoanService {
             return Response.status(Status.NOT_FOUND).build();
         } else {
             entityManager.getTransaction().begin();
-            currentLoan.deactivateLoan();
+            currentLoan.returnBook();
             book.removeLoan(currentLoan);
+            book.returnCopy();
             entityManager.merge(currentLoan);
             entityManager.merge(book);
             entityManager.getTransaction().commit();
@@ -126,37 +128,19 @@ public class LoanServiceImpl implements LoanService {
     @Override
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/users/{user_id}/current-books")
-    public Collection<Book> getCurrentBooksOfUser(@PathParam("user_id") long user_id) {
-        Collection<Book> books = new ArrayList<>();
-
+    @Path("/users/{user_id}/current-loans")
+    public Collection<BookLoan> getCurrentBookLoansOfUser(@PathParam("user_id") long user_id) {
         User user = entityManager.find(User.class, user_id);
-        Collection<BookLoan> loans = user.getBookLoans();
-        for (BookLoan loan : loans) {
-            if (loan.isActive()) {
-                books.add(loan.getBook());
-            }
-        }
-
-        return books;
+        return user.getActiveBookLoans();
     }
 
     @Override
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/users/{user_id}/returned-books")
-    public Collection<Book> getReturnedBooksOfUser(@PathParam("user_id") long user_id) {
-        Collection<Book> books = new ArrayList<>();
-
+    @Path("/users/{user_id}/returned-loans")
+    public Collection<BookLoan> getReturnedBookLoansOfUser(@PathParam("user_id") long user_id) {
         User user = entityManager.find(User.class, user_id);
-
-        Collection<BookLoan> loans = user.getBookLoans();
-        for (BookLoan loan : loans) {
-            if (!loan.isActive()) {
-                books.add(loan.getBook());
-            }
-        }
-        return books;
+        return user.getOldBookLoans();
     }
 
 }

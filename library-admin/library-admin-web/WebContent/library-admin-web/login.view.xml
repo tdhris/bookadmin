@@ -1,21 +1,20 @@
 <core:View height="100%" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
 	xmlns="sap.m" controllerName="library-admin-web.login" xmlns:html="http://www.w3.org/1999/xhtml">
-	<VBox alignItems="Center">
-		<items>
-			<Label text="Username" design="Bold" labelFor="usernameInput"/>
-			<Input id="usernameInput" type="Text" placeholder="Enter Username"
-				valueStateText="Name must not be empty. Maximum 10 characters."
-				value="{
-          path : 'Name',
-          type : 'sap.ui.model.type.String',
-          constraints : {
-            minLength: 1,
-            maxLength: 10
-          }
-        }" />
-			<Label text="Password" design="Bold" labelFor="passwordInput"/>
-			<Input id="passwordInput" type="Password" placeholder="Enter password" />
-			<Button text="Login" press="loginPress" />
-		</items>
-	</VBox>
+	<Panel>
+		<headerToolbar>
+			<Toolbar>
+				<Label text="Login" />
+			</Toolbar>
+		</headerToolbar>
+
+		<FlexBox alignItems="Center" justifyContent="Center">
+			<items>
+				<Input id="usernameInput" type="Text" placeholder="Enter Username"
+					valueStateText="Name must not be empty. Maximum 10 characters."
+					value="{path : 'Name', type : 'sap.ui.model.type.String', constraints : { minLength: 1, maxLength: 10 } }" />
+				<Input id="passwordInput" type="Password" placeholder="Enter password" />
+				<Button text="Login" press="loginPress" icon="sap-icon://log"/>
+			</items>
+		</FlexBox>
+	</Panel>
 </core:View>

@@ -1,14 +1,19 @@
 package com.sap.internship.libraryadmin.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @Entity
@@ -27,10 +32,17 @@ public class BookLoan implements Serializable {
     @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
     private User user;
 
-    private boolean isActive;
+    private String dateTaken;
+
+    private String dateReturned;
+
+    @Transient
+    @JsonIgnore
+    private static final String dateFormat = "dd.MM.yyyy HH:mm";
 
     public BookLoan() {
-        this.setActive(true);
+        this.setDateTaken(this.getNow());
+        this.setDateReturned(null);
     }
 
     public Book getBook() {
@@ -49,14 +61,6 @@ public class BookLoan implements Serializable {
         this.user = user;
     }
 
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean isActive) {
-        this.isActive = isActive;
-    }
-
     public long getId() {
         return id;
     }
@@ -65,7 +69,33 @@ public class BookLoan implements Serializable {
         this.id = id;
     }
 
-    public void deactivateLoan() {
-        this.setActive(false);
+    @JsonProperty("dateTaken")
+    public String getDateTaken() {
+        return dateTaken;
+    }
+
+    public void setDateTaken(String dateTaken) {
+        this.dateTaken = dateTaken;
+    }
+
+    @JsonProperty("dateReturned")
+    public String getDateReturned() {
+        return dateReturned;
+    }
+
+    public void setDateReturned(String dateReturned) {
+        this.dateReturned = dateReturned;
+    }
+
+    public void returnBook() {
+        this.setDateReturned(this.getNow());
+    }
+
+    public boolean isActive() {
+        return this.getDateReturned() == null;
+    }
+
+    private String getNow() {
+        return new SimpleDateFormat(dateFormat).format(new Date());
     }
 }

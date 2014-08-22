@@ -6,11 +6,16 @@ sap.ui
 						this.getView().setModel(new sap.ui.model.json.JSONModel(), "bookModel");
 						this.getView().setModel(new sap.ui.model.json.JSONModel(), "userModel");
 						this.getView().setModel(new sap.ui.model.json.JSONModel({
-							book : {'title': "A Game of Thrones", 'author': "George Martin", 'description': 'sdsjkjasdksajdkasjdkjskdj sak', 'copies': "3"},
-							user : {'username': "Lala", "facultyNumber": "42343"}
+							book : {
+								title : "Lala",
+								author : "Lala Lala",
+								description : "34235 dflkjlad kjalksjf lkasfj2",
+								copies : "3"
+							},
+							user : { username : "Lala", facultyNumber : "32345" }
 						}), "formModel");
 					},
-					
+
 					updateModel : function(event) {
 						this.getView().setModel(new sap.ui.model.json.JSONModel(this.booksListServiceUrl), "bookModel");
 						this.getView().setModel(new sap.ui.model.json.JSONModel(this.usersListServiceUrl), "userModel");
@@ -22,7 +27,7 @@ sap.ui
 
 					addBook : function() {
 						var book = this.getModel("formModel").getProperty("/book");
-						
+
 						if (this.isValidBook(book)) {
 							$.ajax({
 								type : "POST",
@@ -33,7 +38,7 @@ sap.ui
 									sap.m.MessageBox.alert("Failure: could not add book.");
 								},
 								success : this.successBookPost.bind(this)
-							});							
+							});
 						} else {
 							sap.m.MessageBox.alert("Error: please make sure title, author, count and description are valid");
 						}
@@ -57,8 +62,8 @@ sap.ui
 									.alert("Failure: username must start with a letter, contain only letters, digits and the symbol _. Faculty Number must contain 5 digits and not start with 0");
 						}
 					},
-					
-					showUserDetails: function(event) {
+
+					showUserDetails : function(event) {
 						var context = event.getSource().getBindingContext('userModel')
 						var userId = context.getProperty('id');
 						sap.ui.localResources("library-admin-web");
@@ -76,15 +81,12 @@ sap.ui
 
 					isValidBook : function(oBook) {
 						if (!(this.isValidTitle(oBook['title']))) {
-							alert('title');
 							return false;
 						} else if (!(this.isValidAuthorName(oBook['author']))) {
-							alert('author');
 							return false;
 						} else if (!(this.isValidCopiesCount(oBook['copies']))) {
 							return false;
 						} else if (!(this.isValidDescription(oBook['description']))) {
-							alert('descr');
 							return false;
 						}
 						return true;

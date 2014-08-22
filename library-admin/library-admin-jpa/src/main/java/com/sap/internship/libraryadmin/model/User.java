@@ -81,6 +81,17 @@ public class User implements Serializable {
         return activeLoans;
     }
 
+    @JsonIgnore
+    public Collection<BookLoan> getOldBookLoans() {
+        Collection<BookLoan> oldLoans = new ArrayList<>();
+        for (BookLoan loan : this.getBookLoans()) {
+            if (!loan.isActive()) {
+                oldLoans.add(loan);
+            }
+        }
+        return oldLoans;
+    }
+
     public void addLoan(BookLoan loan) {
         this.getBookLoans().add(loan);
     }
@@ -93,5 +104,25 @@ public class User implements Serializable {
         }
 
         return true;
+    }
+
+    public boolean hasTakenBook(Book book) {
+        for (BookLoan bookLoan : this.getBookLoans()) {
+            if (book.equals(bookLoan.getBook())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public BookLoan getActiveLoan(Book book) {
+        for (BookLoan bookLoan : this.getActiveBookLoans()) {
+            if (book.equals(bookLoan.getBook())) {
+                return bookLoan;
+            }
+        }
+
+        return null;
     }
 }

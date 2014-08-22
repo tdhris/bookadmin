@@ -2,40 +2,45 @@
 	xmlns="sap.m" controllerName="library-admin-web.details" xmlns:html="http://www.w3.org/1999/xhtml">
 	<Page id="detailsPageId" title="{userModel>/username Details}"
 		showNavButton="true" navButtonTap="goBack">
+		<headerContent>
+			<Button text="   Take Book   " press="showBookList" icon="sap-icon://course-book" />
+		</headerContent>
 		<content>
-			<ObjectHeader title="{userModel>/username}">
+			<ObjectHeader title="{userModel>/username}" icon="sap-icon://employee">
 				<attributes>
 					<ObjectAttribute text="FACULTY NUMBER : {userModel>/facultyNumber}" />
 				</attributes>
 			</ObjectHeader>
 			<List
-				items="{ path: 'activeBooksOfUserModel>/', sorter: { path: 'activeBooksOfUserModel>/title' } }"
-				headerText="Books Taken">
+				items="{ path: 'activeBookLoansOfUserModel>/', sorter: { path: 'activeBookLoansOfUserModel>book>/title' } }"
+				headerText="Books Taken (Click to Return)">
 				<items>
-					<ObjectListItem title="{activeBooksOfUserModel>title}"
-						type="Active" press="confirmReturn">
+					<ObjectListItem title="'{activeBookLoansOfUserModel>book/title}'"
+						type="Active" press="confirmReturn" number="{activeBookLoansOfUserModel>dateTaken}">
+						<firstStatus>
+							<ObjectStatus text="Taken" state="Error" />
+						</firstStatus>
 						<attributes>
-							<ObjectAttribute text="Written by {activeBooksOfUserModel>author}" />
-							<ObjectAttribute
-								text="Available Copies Left : {activeBooksOfUserModel>availableCopiesInt}" />
+							<ObjectAttribute text="by {activeBookLoansOfUserModel>book/author}" />
 						</attributes>
 					</ObjectListItem>
 				</items>
 			</List>
 			<List
-				items="{ path: 'pastBooksOfUserModel>/', sorter: { path: 'pastBooksOfUserModel>/title' } }"
-				headerText="Book History (Books Returned)">
+				items="{ path: 'pastBookLoansOfUserModel>/', sorter: { path: 'pastBookLoansOfUserModel>dateReturned' } }"
+				headerText="Book Loan History (Books Returned)">
 				<items>
-					<ObjectListItem title="{pastBooksOfUserModel>title}">
+					<ObjectListItem title="'{pastBookLoansOfUserModel>book/title}'"
+						number="{pastBookLoansOfUserModel>dateReturned}">
+						<firstStatus>
+							<ObjectStatus text="Returned" state="Success" />
+						</firstStatus>
 						<attributes>
-							<ObjectAttribute text="Written by {pastBooksOfUserModel>author}" />
-							<ObjectAttribute
-								text="Available Copies : {pastBooksOfUserModel>availableCopiesInt}" />
+							<ObjectAttribute text="by {pastBookLoansOfUserModel>book/author}" />
 						</attributes>
 					</ObjectListItem>
 				</items>
 			</List>
-			<Button text="Take Book" press="showBookList" />
 		</content>
 	</Page>
 </core:View>

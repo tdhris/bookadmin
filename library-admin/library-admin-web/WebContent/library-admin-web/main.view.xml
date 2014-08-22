@@ -4,7 +4,7 @@
 		<content>
 			<IconTabBar id="tabBar">
 				<items>
-					<IconTabFilter text="Add Book">
+					<IconTabFilter text="Add Book" icon="sap-icon://course-book">
 						<VBox alignItems="Center">
 							<items>
 								<Input id="titleInput" type="Text" placeholder="Enter Book Title"
@@ -18,22 +18,22 @@
 									value="{ path : 'formModel>/book/description'}" />
 								<Input id="copiesInput" placeholder="Copies count"
 									tooltip="At least 1 copy. No more than 5 digits." value="{path : 'formModel>/book/copies' }" />
-								<Button text="Add Book" press="addBook" />
+								<Button text="Add Book" press="addBook" icon="sap-icon://course-book"/>
 							</items>
 						</VBox>
 					</IconTabFilter>
-					<IconTabFilter text="Add User">
+					<IconTabFilter text="Add User" icon="sap-icon://customer">
 						<VBox alignItems="Center">
 							<items>
 								<Input id="usernameInput" type="Text" placeholder="Enter username"
 									value="{ path : 'formModel>/user/username' }" />
 								<Input id="facultyNumberInput" placeholder="Faculty Number"
 									value="{path : 'formModel>/user/facultyNumber' }" />
-								<Button text="Add User" press="addUser" />
+								<Button text="Add User" press="addUser" icon="sap-icon://customer"/>
 							</items>
 						</VBox>
 					</IconTabFilter>
-					<IconTabFilter text="List Books">
+					<IconTabFilter text="List Books" icon="sap-icon://education">
 						<Table id="idBooksTable" inset="false" visibleRowCount="5"
 							selectionMode="Single" editable="false" items="{bookModel>/}">
 							<headerToolbar>
@@ -73,18 +73,17 @@
 							</items>
 						</Table>
 					</IconTabFilter>
-					<IconTabFilter text="List Users">
+					<IconTabFilter text="List Users" icon="sap-icon://group">
 						<List
 							items="{ path: 'userModel>/', sorter: { path: 'userModel>facultyNumber' } }"
 							headerText="Library Users">
 							<items>
 								<ObjectListItem title="{userModel>username}"
-									type="Active" press="showUserDetails" number="{userModel>facultyNumber}">
+									type="Active" press="showUserDetails" number="{userModel>facultyNumber}"
+									icon="sap-icon://employee-pane">
 								</ObjectListItem>
 							</items>
 						</List>
-					</IconTabFilter>
-					<IconTabFilter text="Add Book">
 					</IconTabFilter>
 				</items>
 			</IconTabBar>
