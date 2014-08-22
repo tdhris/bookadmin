@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv='Content-Type' content='text/html;charset=UTF-8' />
+
+<script src="resources/sap-ui-core.js" id="sap-ui-bootstrap"
+	data-sap-ui-libs="sap.m, sap.ui.commons, sap.ui.table, sap.ui.ux3"
+	data-sap-ui-theme="sap_bluecrystal"
+	data-sap-ui-xx-bindingSyntax="complex">
+	
+</script>
+<script>
+	$.sap.require("sap.m.MessageBox");
+
+	sap.ui.localResources("library-admin-web");
+	var login = sap.ui.view({
+		id : "login1",
+		viewName : "library-admin-web.login",
+		type : sap.ui.core.mvc.ViewType.XML
+	});
+	var main = sap.ui.view({
+		id : "main1",
+		viewName : "library-admin-web.main",
+		type : sap.ui.core.mvc.ViewType.XML
+	});
+	
+	var details = sap.ui.view({
+		id : "details1",
+		viewName : "library-admin-web.details",
+		type : sap.ui.core.mvc.ViewType.XML
+	});
+	details.addEventDelegate({ onBeforeShow: details.getController().updateModel.bind(details.getController())});
+
+	var app = new sap.m.App("LibAdminApp");
+	//app.addPage(login).addPage(main);
+	app.addPage(main).addPage(details);
+	var shell = new sap.m.Shell("Shell", {
+		showLogout : false
+	});
+	shell.setApp(app)
+	shell.placeAt('content');
+</script>
+
+</head>
+<body class="sapUiBody" role="application">
+	<div id="content"></div>
+</body>
+</html>
