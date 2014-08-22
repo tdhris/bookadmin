@@ -6,13 +6,8 @@ sap.ui
 						this.getView().setModel(new sap.ui.model.json.JSONModel(), "bookModel");
 						this.getView().setModel(new sap.ui.model.json.JSONModel(), "userModel");
 						this.getView().setModel(new sap.ui.model.json.JSONModel({
-							book : {
-								title : "Lala",
-								author : "Lala Lala",
-								description : "34235 dflkjlad kjalksjf lkasfj2",
-								copies : "3"
-							},
-							user : { username : "Lala", facultyNumber : "32345" }
+							book : {},
+							user : {}
 						}), "formModel");
 					},
 
@@ -25,23 +20,17 @@ sap.ui
 						return this.getView().getModel(sModelName);
 					},
 
-					addBook : function() {
-						var book = this.getModel("formModel").getProperty("/book");
-
-						if (this.isValidBook(book)) {
-							$.ajax({
-								type : "POST",
-								url : this.booksListServiceUrl,
-								data : JSON.stringify(book),
-								contentType : 'application/json; charset=UTF-8',
-								error : function() {
-									sap.m.MessageBox.alert("Failure: could not add book.");
-								},
-								success : this.successBookPost.bind(this)
-							});
-						} else {
-							sap.m.MessageBox.alert("Error: please make sure title, author, count and description are valid");
-						}
+					addBook : function(book) {
+						$.ajax({
+							type : "POST",
+							url : this.booksListServiceUrl,
+							data : JSON.stringify(book),
+							contentType : 'application/json; charset=UTF-8',
+							error : function() {
+								sap.m.MessageBox.alert("Failure: could not add book.");
+							},
+							success : this.successBookPost.bind(this)
+						});
 					},
 
 					addUser : function() {
@@ -79,17 +68,37 @@ sap.ui
 						return true;
 					},
 
-					isValidBook : function(oBook) {
+					ckeckBook : function(oBook) {
+						var isValid = true;
+
 						if (!(this.isValidTitle(oBook['title']))) {
-							return false;
-						} else if (!(this.isValidAuthorName(oBook['author']))) {
-							return false;
-						} else if (!(this.isValidCopiesCount(oBook['copies']))) {
-							return false;
-						} else if (!(this.isValidDescription(oBook['description']))) {
-							return false;
+							this.getView().byId("titleInput").setValueState(sap.ui.core.ValueState.Error);
+							isValid = false;
+						} else {
+							this.setInputState("titleInput", sap.ui.core.ValueState.Success);
 						}
-						return true;
+
+						if (!(this.isValidAuthorName(oBook['author']))) {
+							this.getView().byId("authorInput").setValueState(sap.ui.core.ValueState.Error);
+							isValid = false;
+						} else {
+							this.setInputState("authorInput", sap.ui.core.ValueState.Success);
+						}
+
+						if (!(this.isValidCopiesCount(oBook['copies']))) {
+							this.setInputState("copiesInput", sap.ui.core.ValueState.Error);
+							isValid = false;
+						} else {
+							this.setInputState("copiesInput", sap.ui.core.ValueState.Success);
+						}
+
+						if (!(this.isValidDescription(oBook['description']))) {
+							this.setInputState("descriptionInput", sap.ui.core.ValueState.Error);
+							isValid = false;
+						} else {
+							this.setInputState("descriptionInput", sap.ui.core.ValueState.Success);
+						}
+						return isValid;
 					},
 
 					isValidTitle : function(sTitle) {
@@ -137,5 +146,27 @@ sap.ui
 
 					refreshModel : function(sModelName, sModelUrl) {
 						this.getModel(sModelName).loadData(sModelUrl);
+					},
+
+					handleBookInput : function(oEvent) {
+						var book = this.getModel("formModel").getProperty("/book");
+
+						if (this.ckeckBook(book)) {
+							this.addBook(book)
+							this.resetBookInputStates();
+						} else {
+							sap.m.MessageBox.alert("Error: please make sure title, author, count and description are valid");
+						}
+					},
+
+					resetBookInputStates : function() {
+						this.getView().byId("titleInput").setValueState(sap.ui.core.ValueState.None);
+						this.getView().byId("authorInput").setValueState(sap.ui.core.ValueState.None);
+						this.getView().byId("copiesInput").setValueState(sap.ui.core.ValueState.None);
+						this.getView().byId("descriptionInput").setValueState(sap.ui.core.ValueState.None);
+					},
+					
+					setInputState: function(sInputName, status) {
+						this.getView().byId(sInputName).setValueState(status);
 					}
 				});

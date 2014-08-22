@@ -8,17 +8,18 @@
 						<VBox alignItems="Center">
 							<items>
 								<Input id="titleInput" type="Text" placeholder="Enter Book Title"
-									tooltip="Title must not be empty and must start with a capital letter. Maximum 30 characters."
+									valueStateText="Title must not be empty and must start with a capital letter. Maximum 30 characters."
 									value="{ path : 'formModel>/book/title' }" />
 								<Input id="authorInput" placeholder="Enter author"
-									tooltip="Author name must not be empty. All names must start with capital letter. Maximum 30 characters."
+									valueStateText="Author name must not be empty. All names must start with capital letter. Maximum 30 characters."
 									value="{ path : 'formModel>/book/author' }" />
 								<Input id="descriptionInput" placeholder="Enter book description"
-									tooltip="Description must be at least 10 characters. Maximum 300 characters."
+									valueStateText="Description must be at least 10 characters. Maximum 300 characters."
 									value="{ path : 'formModel>/book/description'}" />
 								<Input id="copiesInput" placeholder="Copies count"
-									tooltip="At least 1 copy. No more than 5 digits." value="{path : 'formModel>/book/copies' }" />
-								<Button text="Add Book" press="addBook" icon="sap-icon://course-book"/>
+									valueStateText="At least 1 copy. No more than 5 digits." value="{path : 'formModel>/book/copies' }" 
+									liveChange="validateCopy"/>
+								<Button text="Add Book" press="handleBookInput" icon="sap-icon://course-book"/>
 							</items>
 						</VBox>
 					</IconTabFilter>
