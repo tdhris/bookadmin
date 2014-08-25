@@ -1,6 +1,5 @@
 package com.sap.internship.libraryadmin.service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.ejb.Stateless;
@@ -89,40 +88,6 @@ public class LoanServiceImpl implements LoanService {
             return Response.status(Status.OK).build();
         }
 
-    }
-
-    @Override
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/books/{book_id}/current-borrowers")
-    public Collection<User> getCurrentBorrowers(@PathParam("book_id") long book_id) {
-        Collection<User> users = new ArrayList<>();
-
-        Book book = entityManager.find(Book.class, book_id);
-        Collection<BookLoan> loans = book.getBookLoans();
-        for (BookLoan loan : loans) {
-            if (loan.isActive()) {
-                users.add(loan.getUser());
-            }
-        }
-        return users;
-    }
-
-    @Override
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/books/{book_id}/past-borrowers")
-    public Collection<User> getPastBorrowers(@PathParam("book_id") long book_id) {
-        Collection<User> users = new ArrayList<>();
-
-        Book book = entityManager.find(Book.class, book_id);
-        Collection<BookLoan> loans = book.getBookLoans();
-        for (BookLoan loan : loans) {
-            if (!loan.isActive()) {
-                users.add(loan.getUser());
-            }
-        }
-        return users;
     }
 
     @Override
