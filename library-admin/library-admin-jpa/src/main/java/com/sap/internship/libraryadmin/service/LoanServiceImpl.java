@@ -2,10 +2,7 @@ package com.sap.internship.libraryadmin.service;
 
 import java.util.Collection;
 
-import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -21,16 +18,19 @@ import com.sap.internship.libraryadmin.model.Book;
 import com.sap.internship.libraryadmin.model.BookLoan;
 import com.sap.internship.libraryadmin.model.User;
 
-@Stateless
 @Path("/Loans")
 public class LoanServiceImpl implements LoanService {
-    @PersistenceContext(unitName = "UserService", type = PersistenceContextType.TRANSACTION)
-    EntityManager entityManager = EntityManagerHelper.getEntityManager(DataSourceProvider.getInstance().get());
+    private EntityManagerProvider entityManagerProvider;
+
+    public LoanServiceImpl() {
+        entityManagerProvider = EntityManagerProvider.getInstance();
+    }
 
     @SuppressWarnings("unchecked")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<BookLoan> getLoans() {
+        EntityManager entityManager = entityManagerProvider.get();
         Query query = entityManager.createQuery("SELECT b FROM BookLoan b");
         return query.getResultList();
     }
@@ -40,6 +40,7 @@ public class LoanServiceImpl implements LoanService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/users/{user_id}/take-book/{book_id}")
     public Response takeBook(@PathParam("user_id") long user_id, @PathParam("book_id") long book_id) {
+        EntityManager entityManager = entityManagerProvider.get();
         User user = entityManager.find(User.class, user_id);
         Book book = entityManager.find(Book.class, book_id);
         if (!book.hasAvailableCopies()) {
@@ -66,6 +67,7 @@ public class LoanServiceImpl implements LoanService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/users/{user_id}/return-book/{book_id}")
     public Response returnBook(@PathParam("user_id") long user_id, @PathParam("book_id") long book_id) {
+        EntityManager entityManager = entityManagerProvider.get();
         User user = entityManager.find(User.class, user_id);
         Book book = entityManager.find(Book.class, book_id);
         BookLoan currentLoan = null;
@@ -95,6 +97,7 @@ public class LoanServiceImpl implements LoanService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/users/{user_id}/current-loans")
     public Collection<BookLoan> getCurrentBookLoansOfUser(@PathParam("user_id") long user_id) {
+        EntityManager entityManager = entityManagerProvider.get();
         User user = entityManager.find(User.class, user_id);
         return user.getActiveBookLoans();
     }
@@ -104,6 +107,7 @@ public class LoanServiceImpl implements LoanService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/users/{user_id}/returned-loans")
     public Collection<BookLoan> getReturnedBookLoansOfUser(@PathParam("user_id") long user_id) {
+        EntityManager entityManager = entityManagerProvider.get();
         User user = entityManager.find(User.class, user_id);
         return user.getOldBookLoans();
     }

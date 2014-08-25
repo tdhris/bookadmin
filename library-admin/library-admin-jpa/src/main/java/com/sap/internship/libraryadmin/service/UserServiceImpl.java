@@ -2,11 +2,7 @@ package com.sap.internship.libraryadmin.service;
 
 import java.util.Collection;
 
-import javax.ejb.Stateless;
-import javax.jws.WebService;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -20,19 +16,20 @@ import javax.ws.rs.core.MediaType;
 
 import com.sap.internship.libraryadmin.model.User;
 
-@Stateless
 @Path("/Users")
-@Produces(MediaType.APPLICATION_JSON)
-@WebService
 public class UserServiceImpl implements UserService {
-    @PersistenceContext(unitName = "UserService", type = PersistenceContextType.TRANSACTION)
-    EntityManager entityManager = EntityManagerHelper.getEntityManager(DataSourceProvider.getInstance().get());
+    private EntityManagerProvider entityManagerProvider;
+
+    public UserServiceImpl() {
+        entityManagerProvider = EntityManagerProvider.getInstance();
+    }
 
     @SuppressWarnings("unchecked")
     @Override
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<User> getUsers() {
+        EntityManager entityManager = entityManagerProvider.get();
         Query query = entityManager.createQuery("SELECT u FROM User u");
         return query.getResultList();
     }
@@ -40,7 +37,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @GET
     @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     public User getUser(@PathParam("id") long id) {
+        EntityManager entityManager = entityManagerProvider.get();
         return entityManager.find(User.class, id);
     }
 
@@ -48,6 +47,7 @@ public class UserServiceImpl implements UserService {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void addUser(User user) {
+        EntityManager entityManager = entityManagerProvider.get();
         entityManager.getTransaction().begin();
         entityManager.persist(user);
         entityManager.getTransaction().commit();
@@ -59,7 +59,10 @@ public class UserServiceImpl implements UserService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public void updateUser(long id, User user) {
+        EntityManager entityManager = entityManagerProvider.get();
+        entityManager.getTransaction().begin();
         entityManager.merge(user);
+        entityManager.getTransaction().commit();
     }
 
     @Override
@@ -68,7 +71,10 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(long id) {
         User user = getUser(id);
         if (user != null) {
+            EntityManager entityManager = entityManagerProvider.get();
+            entityManager.getTransaction().begin();
             entityManager.remove(user);
+            entityManager.getTransaction().commit();
         }
     }
 }

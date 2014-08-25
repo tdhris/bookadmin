@@ -34,7 +34,7 @@
 	details.addEventDelegate({ onBeforeShow: details.getController().updateModel.bind(details.getController())});
 
 	var app = new sap.m.App("LibAdminApp");
-	app.addPage(main).addPage(details);
+	app.addPage(login).addPage(main).addPage(details);
 	var shell = new sap.m.Shell("Shell", {
 		showLogout : false
 	});

@@ -2,11 +2,7 @@ package com.sap.internship.libraryadmin.service;
 
 import java.util.Collection;
 
-import javax.ejb.Stateless;
-import javax.jws.WebService;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -20,18 +16,20 @@ import javax.ws.rs.core.MediaType;
 
 import com.sap.internship.libraryadmin.model.Book;
 
-@Stateless
 @Path("/Books")
-@Produces(MediaType.APPLICATION_JSON)
-@WebService
 public class BookServiceImpl implements BookService {
-    @PersistenceContext(unitName = "BookService", type = PersistenceContextType.TRANSACTION)
-    EntityManager entityManager = EntityManagerHelper.getEntityManager(DataSourceProvider.getInstance().get());
+    private EntityManagerProvider managerProvider;
+
+    public BookServiceImpl() {
+        managerProvider = EntityManagerProvider.getInstance();
+    }
 
     @SuppressWarnings("unchecked")
     @Override
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     public Collection<Book> getBooks() {
+        EntityManager entityManager = managerProvider.get();
         Query query = entityManager.createQuery("SELECT b FROM Book b");
         return query.getResultList();
     }
@@ -39,7 +37,9 @@ public class BookServiceImpl implements BookService {
     @Override
     @GET
     @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Book getBook(@PathParam("id") long id) {
+        EntityManager entityManager = managerProvider.get();
         return entityManager.find(Book.class, id);
     }
 
@@ -48,6 +48,7 @@ public class BookServiceImpl implements BookService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public int getCopiesTakenCount(long id) {
+        EntityManager entityManager = managerProvider.get();
         Book book = entityManager.find(Book.class, id);
         return book.takenCount();
     }
@@ -56,6 +57,7 @@ public class BookServiceImpl implements BookService {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void addBook(Book book) {
+        EntityManager entityManager = managerProvider.get();
         String copies = book.getCopies();
         book.setAvailableCopies(copies);
         entityManager.getTransaction().begin();
@@ -68,7 +70,10 @@ public class BookServiceImpl implements BookService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public void updateBook(@PathParam("id") long id, Book book) {
+        EntityManager entityManager = managerProvider.get();
+        entityManager.getTransaction().begin();
         entityManager.merge(book);
+        entityManager.getTransaction().commit();
     }
 
     @Override
@@ -76,8 +81,11 @@ public class BookServiceImpl implements BookService {
     @Path("/{id}")
     public void deleteBook(@PathParam("id") long id) {
         Book book = getBook(id);
+        EntityManager entityManager = managerProvider.get();
         if (book != null) {
+            entityManager.getTransaction().begin();
             entityManager.remove(book);
+            entityManager.getTransaction().commit();
         }
     }
 

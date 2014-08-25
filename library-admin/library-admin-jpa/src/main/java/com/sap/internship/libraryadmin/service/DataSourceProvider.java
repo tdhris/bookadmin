@@ -8,12 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DataSourceProvider {
-
+    private static DataSource dataSource = null;
+    private static DataSourceProvider instance = null;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private static DataSource dataSource = null;
-    private static DataSourceProvider instance;
-
+    // only one DataSourceProvider for the application
     public synchronized static DataSourceProvider getInstance() {
         if (instance == null) {
             instance = new DataSourceProvider();
@@ -24,9 +23,9 @@ public class DataSourceProvider {
     private DataSourceProvider() {
         try {
             final InitialContext ctx = new InitialContext();
-            dataSource = (DataSource) ctx.lookup("java:comp/env/jdbc/DefaultDB"); //$NON-NLS-1$
+            dataSource = (DataSource) ctx.lookup("java:comp/env/jdbc/DefaultDB");
         } catch (NamingException e) {
-            logger.error("Could not lookup the default datasource", e); //$NON-NLS-1$
+            logger.error("Could not lookup the default datasource", e);
             throw new RuntimeException(e);
         }
     }

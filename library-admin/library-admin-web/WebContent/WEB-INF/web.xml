@@ -5,26 +5,12 @@
 	version="2.5">
 	<display-name>library-admin-web</display-name>
 	<servlet>
-		<display-name>ResourceServlet</display-name>
-		<servlet-name>ResourceServlet</servlet-name>
-		<servlet-class>com.sap.ui5.resource.ResourceServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>ResourceServlet</servlet-name>
-		<url-pattern>/resources/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>ResourceServlet</servlet-name>
-		<url-pattern>/test-resources/*</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
 		<display-name>CXF Servlet</display-name>
 		<servlet-name>CXFServlet</servlet-name>
 		<servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>
 		<init-param>
 			<param-name>javax.ws.rs.Application</param-name>
-			<param-value>main.webapp.RestConfig</param-value>
+			<param-value>main.java.webapp.RestConfig</param-value>
 		</init-param>
 		<load-on-startup>2</load-on-startup>
 	</servlet>
@@ -33,6 +19,7 @@
 		<url-pattern>/services/*</url-pattern>
 	</servlet-mapping>
 
+	<!-- Prevents caching of any resource -->
 	<filter>
 		<display-name>CacheControlFilter</display-name>
 		<filter-name>CacheControlFilter</filter-name>
@@ -58,6 +45,16 @@
 		<filter-name>CacheControlFilter</filter-name>
 		<url-pattern>*.css</url-pattern>
 	</filter-mapping>
+
+	<filter>
+		<filter-name>ServiceFilter</filter-name>
+		<filter-class>main.java.webapp.filter.ServiceFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>ServiceFilter</filter-name>
+		<url-pattern>/services/*</url-pattern>
+	</filter-mapping>
+
 	<resource-ref>
 		<res-ref-name>jdbc/DefaultDB</res-ref-name>
 		<res-type>javax.sql.DataSource</res-type>
