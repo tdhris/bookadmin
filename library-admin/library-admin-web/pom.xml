@@ -11,7 +11,6 @@
 	<properties>
 		<ui5.version>1.22.6</ui5.version>
 		<sap.cloud.jdk.version>1.7</sap.cloud.jdk.version>
-		<sap.cloud.sdk.version>1.56.18.4</sap.cloud.sdk.version>
 		<apache.cxf.version>2.7.0</apache.cxf.version>
 	</properties>
 
@@ -85,12 +84,6 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.sap.core.distro.jpaas</groupId>
-			<artifactId>neo-sdk-core-api</artifactId>
-			<version>${sap.cloud.sdk.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

@@ -17,9 +17,10 @@ import javax.ws.rs.core.Response.Status;
 import com.sap.internship.libraryadmin.model.Book;
 import com.sap.internship.libraryadmin.model.BookLoan;
 import com.sap.internship.libraryadmin.model.User;
+import com.sap.internship.libraryadmin.providers.EntityManagerProvider;
 
 @Path("/Loans")
-public class LoanServiceImpl implements LoanService {
+public class LoanServiceImpl extends BaseService implements LoanService {
     private EntityManagerProvider entityManagerProvider;
 
     public LoanServiceImpl() {
@@ -44,9 +45,9 @@ public class LoanServiceImpl implements LoanService {
         User user = entityManager.find(User.class, user_id);
         Book book = entityManager.find(Book.class, book_id);
         if (!book.hasAvailableCopies()) {
-            return Response.status(Status.PRECONDITION_FAILED).entity("There are no available copies of this book").build();
+            return this.customResponse(Status.PRECONDITION_FAILED, "There are no available copies of this book");
         } else if (!user.canTakeBook(book)) {
-            return Response.status(Status.PRECONDITION_FAILED).entity("User already has a copy of this book").build();
+            return this.customResponse(Status.PRECONDITION_FAILED, "User already has a copy of this book");
         } else {
             entityManager.getTransaction().begin();
             BookLoan loan = new BookLoan();
@@ -58,7 +59,7 @@ public class LoanServiceImpl implements LoanService {
             entityManager.merge(book);
             entityManager.merge(user);
             entityManager.getTransaction().commit();
-            return Response.status(Status.OK).build();
+            return this.okResponse();
         }
     }
 
@@ -78,7 +79,7 @@ public class LoanServiceImpl implements LoanService {
             }
         }
         if (currentLoan == null) {
-            return Response.status(Status.NOT_FOUND).build();
+            return this.customResponse(Status.NOT_FOUND);
         } else {
             entityManager.getTransaction().begin();
             currentLoan.returnBook();
@@ -87,7 +88,7 @@ public class LoanServiceImpl implements LoanService {
             entityManager.merge(currentLoan);
             entityManager.merge(book);
             entityManager.getTransaction().commit();
-            return Response.status(Status.OK).build();
+            return this.okResponse();
         }
 
     }

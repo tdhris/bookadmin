@@ -1,6 +1,10 @@
 <core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
 	xmlns="sap.m" controllerName="library-admin-web.main" xmlns:html="http://www.w3.org/1999/xhtml">
 	<Page title="Library Admin">
+		<headerContent>
+			<Text text="You are logged in as: {loggedUserModel>/name}" />
+			<Button text="Logout" icon="sap-icon://log" press="logout"/>
+		</headerContent>
 		<content>
 			<IconTabBar id="tabBar">
 				<items>
@@ -17,9 +21,9 @@
 									valueStateText="Description must be at least 10 characters. Maximum 300 characters."
 									value="{ path : 'formModel>/book/description'}" />
 								<Input id="copiesInput" placeholder="Copies count"
-									valueStateText="At least 1 copy. No more than 5 digits." value="{path : 'formModel>/book/copies' }" 
-									liveChange="validateCopy"/>
-								<Button text="Add Book" press="handleBookInput" icon="sap-icon://course-book"/>
+									valueStateText="At least 1 copy. No more than 5 digits." value="{path : 'formModel>/book/copies' }"
+									liveChange="validateCopy" />
+								<Button text="Add Book" press="handleBookInput" icon="sap-icon://course-book" />
 							</items>
 						</VBox>
 					</IconTabFilter>
@@ -30,7 +34,7 @@
 									value="{ path : 'formModel>/user/username' }" />
 								<Input id="facultyNumberInput" placeholder="Faculty Number"
 									value="{path : 'formModel>/user/facultyNumber' }" />
-								<Button text="Add User" press="addUser" icon="sap-icon://customer"/>
+								<Button text="Add User" press="addUser" icon="sap-icon://customer" />
 							</items>
 						</VBox>
 					</IconTabFilter>

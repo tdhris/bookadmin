@@ -1,4 +1,4 @@
-package com.sap.internship.libraryadmin.service;
+package com.sap.internship.libraryadmin.providers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +8,8 @@ import javax.persistence.Persistence;
 import javax.sql.DataSource;
 
 import org.eclipse.persistence.config.PersistenceUnitProperties;
+
+import com.sap.internship.libraryadmin.providers.DataSourceProvider;
 
 public class EntityManagerFactoryProvider {
     private static EntityManagerFactoryProvider instance = null;

@@ -9,7 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import com.sap.internship.libraryadmin.service.EntityManagerProvider;
+import com.sap.internship.libraryadmin.providers.EntityManagerProvider;
 
 public class ServiceFilter implements Filter {
 

@@ -24,21 +24,26 @@
 		viewName : "library-admin-web.main",
 		type : sap.ui.core.mvc.ViewType.XML
 	});
-	main.addEventDelegate({ onBeforeShow: main.getController().updateModel.bind(main.getController())});
-	
+	main.addEventDelegate({
+		onBeforeShow : main.getController().updateModel.bind(main.getController())
+	});
+
 	var details = sap.ui.view({
 		id : "details1",
 		viewName : "library-admin-web.details",
 		type : sap.ui.core.mvc.ViewType.XML
 	});
-	details.addEventDelegate({ onBeforeShow: details.getController().updateModel.bind(details.getController())});
+	details.addEventDelegate({
+		onBeforeShow : details.getController().updateModel.bind(details.getController())
+	});
 
 	var app = new sap.m.App("LibAdminApp");
-	app.addPage(login).addPage(main).addPage(details);
+	app.addPage(main).addPage(details);
 	var shell = new sap.m.Shell("Shell", {
-		showLogout : false
+		showLogout : true,
 	});
-	shell.setApp(app)
+
+	shell.setApp(app);
 	shell.placeAt('content');
 </script>
 

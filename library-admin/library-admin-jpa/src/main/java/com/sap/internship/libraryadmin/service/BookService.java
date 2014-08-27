@@ -2,6 +2,8 @@ package com.sap.internship.libraryadmin.service;
 
 import java.util.Collection;
 
+import javax.ws.rs.core.Response;
+
 import com.sap.internship.libraryadmin.model.Book;
 
 public interface BookService {
@@ -9,7 +11,7 @@ public interface BookService {
 
     Book getBook(long id);
 
-    void addBook(Book book);
+    Response addBook(Book book);
 
     void updateBook(long id, Book book);
 

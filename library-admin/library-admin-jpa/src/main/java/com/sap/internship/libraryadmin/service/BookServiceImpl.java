@@ -13,11 +13,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.sap.internship.libraryadmin.model.Book;
+import com.sap.internship.libraryadmin.providers.EntityManagerProvider;
 
 @Path("/Books")
-public class BookServiceImpl implements BookService {
+public class BookServiceImpl extends BaseService implements BookService {
     private EntityManagerProvider managerProvider;
 
     public BookServiceImpl() {
@@ -56,13 +58,14 @@ public class BookServiceImpl implements BookService {
     @Override
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void addBook(Book book) {
+    public Response addBook(Book book) {
         EntityManager entityManager = managerProvider.get();
         String copies = book.getCopies();
         book.setAvailableCopies(copies);
         entityManager.getTransaction().begin();
         entityManager.persist(book);
         entityManager.getTransaction().commit();
+        return this.okResponse();
     }
 
     @Override

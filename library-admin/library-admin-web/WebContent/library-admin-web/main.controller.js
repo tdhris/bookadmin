@@ -5,6 +5,7 @@ sap.ui
 					onInit : function() {
 						this.getView().setModel(new sap.ui.model.json.JSONModel(), "bookModel");
 						this.getView().setModel(new sap.ui.model.json.JSONModel(), "userModel");
+						this.getView().setModel(new sap.ui.model.json.JSONModel(), "loggedUserModel");
 						this.getView().setModel(new sap.ui.model.json.JSONModel({
 							book : {},
 							user : {}
@@ -14,6 +15,7 @@ sap.ui
 					updateModel : function(event) {
 						this.getView().setModel(new sap.ui.model.json.JSONModel(this.booksListServiceUrl), "bookModel");
 						this.getView().setModel(new sap.ui.model.json.JSONModel(this.usersListServiceUrl), "userModel");
+						this.getView().setModel(new sap.ui.model.json.JSONModel(this.loggedUserServiceURL), "loggedUserModel");
 					},
 
 					getModel : function(sModelName) {
@@ -127,6 +129,8 @@ sap.ui
 
 					booksListServiceUrl : "services/Books",
 					usersListServiceUrl : "services/Users",
+					loggedUserServiceURL : "services/LoggedUser",
+					logoutServletURL : "LogoutServlet",
 
 					successBookPost : function() {
 						sap.m.MessageBox.alert("Successfully added book");
@@ -165,8 +169,25 @@ sap.ui
 						this.getView().byId("copiesInput").setValueState(sap.ui.core.ValueState.None);
 						this.getView().byId("descriptionInput").setValueState(sap.ui.core.ValueState.None);
 					},
-					
-					setInputState: function(sInputName, status) {
+
+					setInputState : function(sInputName, status) {
 						this.getView().byId(sInputName).setValueState(status);
+					},
+
+					logout : function() {
+						$.ajax({
+							type : "GET",
+							url : this.logoutServletURL,
+							error : function() {
+								sap.m.MessageBox.alert("Logout failed");
+							},
+							success : this.sucessLogout.bind(this)
+						});
+					},
+
+					sucessLogout : function() {
+						this.refreshModel("loggedUserModel", this.loggedUserServiceURL);
+						var rootURL = window.location.origin;
+						window.location.replace(rootURL + "/library-admin-web/");
 					}
 				});

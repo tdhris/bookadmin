@@ -1,4 +1,4 @@
-package com.sap.internship.libraryadmin.service;
+package com.sap.internship.libraryadmin.providers;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;

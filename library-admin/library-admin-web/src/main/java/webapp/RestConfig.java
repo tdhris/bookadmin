@@ -9,6 +9,7 @@ import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 
 import com.sap.internship.libraryadmin.service.BookServiceImpl;
 import com.sap.internship.libraryadmin.service.LoanServiceImpl;
+import com.sap.internship.libraryadmin.service.LoggedUserService;
 import com.sap.internship.libraryadmin.service.UserServiceImpl;
 
 public class RestConfig extends Application {
@@ -19,6 +20,7 @@ public class RestConfig extends Application {
         singletons.add(new BookServiceImpl());
         singletons.add(new UserServiceImpl());
         singletons.add(new LoanServiceImpl());
+        singletons.add(new LoggedUserService());
     }
 
     @Override
