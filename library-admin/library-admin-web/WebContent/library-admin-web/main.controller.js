@@ -176,7 +176,7 @@ sap.ui
 
 					logout : function() {
 						$.ajax({
-							type : "GET",
+							type : "POST",
 							url : this.logoutServletURL,
 							error : function() {
 								sap.m.MessageBox.alert("Logout failed");
@@ -188,6 +188,6 @@ sap.ui
 					sucessLogout : function() {
 						this.refreshModel("loggedUserModel", this.loggedUserServiceURL);
 						var rootURL = window.location.origin;
-						window.location.replace(rootURL + "/library-admin-web/");
+						window.location.replace(rootURL + "/library-admin-web/LogoutServlet");
 					}
 				});

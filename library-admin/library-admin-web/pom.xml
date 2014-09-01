@@ -125,6 +125,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>library-admin-web</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>

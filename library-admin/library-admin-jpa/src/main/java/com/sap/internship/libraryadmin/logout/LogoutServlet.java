@@ -17,16 +17,21 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getRemoteUser() != null) {
+            response.setContentType("text/html");
             try {
                 LoginContext loginContext = LoginContextFactory.createLoginContext();
                 loginContext.logout();
-                response.setStatus(200);
+                response.setStatus(HttpServletResponse.SC_OK);
+                // response.getWriter().println("You have successfully logged out.");
 
             } catch (LoginException e) {
                 String errMsg = "Logout failed. Reason: " + e.getMessage();
                 response.getWriter().println(errMsg);
-                response.setStatus(406);
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
+
+        } else {
+            response.getWriter().println("You have successfully logged out.");
         }
     }
 
